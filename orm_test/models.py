@@ -1,3 +1,4 @@
+from operator import truediv
 
 from django.db import models
 from django.db.models import CASCADE
@@ -8,7 +9,7 @@ class Author(models.Model):
     username = models.CharField(max_length=50, unique=True)
     age = models.IntegerField()
     email = models.EmailField(null=True, blank=True)
-    note = models.CharField(max_length=40)
+    bio = models.TextField(default="Authors bio")
 
     def __str__(self):
         return f"Author {self.username}"
@@ -21,10 +22,16 @@ class Post(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     image = models.URLField(null=True, blank=True)
+    published = models.BooleanField(default=False)
 
     def __str__(self):
         return f"{self.title} ({self.author})"
-
+'''
+    def published_recently(self):
+        current_time = models.DateTimeField(auto_now_add=True)
+        if self.created_at > current_time:
+            return True
+'''
 
 class PostLike(models.Model):
     author = models.ForeignKey(Author, related_name="post_like", on_delete=models.CASCADE)
